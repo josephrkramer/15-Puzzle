@@ -5,9 +5,19 @@
  * Released under the MIT license
  */
 (function(){
+
+	const NUM_SIDE = 3;
+
+	const MAX_NUM = (NUM_SIDE * NUM_SIDE) - 1;
+	const MAX_ROW_COL = NUM_SIDE - 1;
+
+	const SQUARE_SIZE = 80;
+	const PUZZLE_SIZE = (SQUARE_SIZE * NUM_SIDE) + 5;
 	
 	var state = 1;
 	var puzzle = document.getElementById('puzzle');
+	puzzle.style.width = `${PUZZLE_SIZE}px`
+	puzzle.style.height = `${PUZZLE_SIZE}px`
 
 	// Creates solved puzzle
 	solve();
@@ -38,14 +48,14 @@
 		puzzle.innerHTML = '';
 		
 		var n = 1;
-		for(var i = 0; i <= 3; i++){
-			for(var j = 0; j <= 3; j++){
+		for(var i = 0; i <= MAX_ROW_COL; i++){
+			for(var j = 0; j <= MAX_ROW_COL; j++){
 				var cell = document.createElement('span');
 				cell.id = 'cell-'+i+'-'+j;
-				cell.style.left = (j*80+1*j+1)+'px';
-				cell.style.top = (i*80+1*i+1)+'px';
+				cell.style.left = (j*SQUARE_SIZE+1*j+1)+'px';
+				cell.style.top = (i*SQUARE_SIZE+1*i+1)+'px';
 				
-				if(n <= 15){
+				if(n <= MAX_NUM){
 					cell.classList.add('number');
 					cell.classList.add((i%2==0 && j%2>0 || i%2>0 && j%2==0) ? 'dark' : 'light');
 					cell.innerHTML = (n++).toString();
@@ -146,9 +156,9 @@
 		var adjacent = [];
 		
 		// Gets all possible adjacent cells
-		if(row < 3){adjacent.push(getCell(row+1, col));}			
+		if(row < MAX_ROW_COL){adjacent.push(getCell(row+1, col));}			
 		if(row > 0){adjacent.push(getCell(row-1, col));}
-		if(col < 3){adjacent.push(getCell(row, col+1));}
+		if(col < MAX_ROW_COL){adjacent.push(getCell(row, col+1));}
 		if(col > 0){adjacent.push(getCell(row, col-1));}
 		
 		return adjacent;
@@ -162,15 +172,15 @@
 	function checkOrder(){
 		
 		// Checks if the empty cell is in correct position
-		if(getCell(3, 3).className != 'empty'){
+		if(getCell(MAX_ROW_COL, MAX_ROW_COL).className != 'empty'){
 			return;
 		}
 	
 		var n = 1;
 		// Goes through all cells and checks numbers
-		for(var i = 0; i <= 3; i++){
-			for(var j = 0; j <= 3; j++){
-				if(n <= 15 && getCell(i, j).innerHTML != n.toString()){
+		for(var i = 0; i <= MAX_ROW_COL; i++){
+			for(var j = 0; j <= MAX_ROW_COL; j++){
+				if(n <= MAX_NUM && getCell(i, j).innerHTML != n.toString()){
 					// Order is not correct
 					return;
 				}
